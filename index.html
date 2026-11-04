@@ -13,7 +13,47 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 body{background:#fff;color:#000;font-family:Times,serif;max-width:900px;margin:2rem auto;padding:1.5rem;line-height:1.6}
-h1,h2{text-align:center}.box{border:1px solid #000;padding:1rem;margin:1.2rem 0;background:#fafafa}
+<!-- BOA84 FAT32 KDP - OneEyeMail Top Bar -->
+<style>
+  .boa84-topbar{
+    position:fixed; top:0; left:0; right:0; z-index:9999;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 16px; background:#0a0a0a; color:#fff;
+    font-family:system-ui,sans-serif; font-size:14px;
+  }
+  .boa84-topbar a{ color:#fff; text-decoration:none; display:flex; gap:8px; align-items:center; }
+  .boa84-eye{ font-size:18px; }
+  .boa84-clock{ font-variant-numeric:tabular-nums; font-weight:700; }
+  body{ padding-top:44px; }
+</style>
+
+<header class="boa84-topbar">
+  <!-- LEFT corner - starting corner - OneEyeMail -->
+  <a href="mailto:mail@kaiolafketelhut.github.io" id="oneEyeMail">
+    <span class="boa84-eye">👁️</span>
+    <span><b>OneEye</b>Mail</span>
+  </a>
+
+  <!-- RIGHT corner - other corner - Clock -->
+  <span class="boa84-clock" id="boa84Clock">00:00:00</span>
+</header>
+
+<script>
+  // BOA84 Clock - other corner
+  function boa84Tick(){
+    const d = new Date();
+    document.getElementById('boa84Clock').textContent =
+      d.toLocaleTimeString('de-DE', {hour12:false});
+  }
+  boa84Tick(); setInterval(boa84Tick, 1000);
+
+  // OneEyeMail - click = open mail
+  document.getElementById('oneEyeMail').addEventListener('click', ()=>{
+    console.log('BOA84 OneEyeMail clicked');
+  });
+</script>
+<!-- /BOA84 Top Bar -->
+ h1,h2{text-align:center}.box{border:1px solid #000;padding:1rem;margin:1.2rem 0;background:#fafafa}
 a{color:#000}img{max-width:100%;border:1px solid #ccc}
 code{background:#eee;padding:2px 5px;font-family:monospace;font-size:13px;word-break:break-all}
 .qemu{background:#000;color:#0f0;padding:10px;display:block;font-family:monospace;overflow-x:auto;margin:0.5rem 0;white-space:pre-wrap}
