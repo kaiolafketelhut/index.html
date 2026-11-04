@@ -101,35 +101,19 @@ Payment: <a href="https://bunq.me/fieldberry">bunq.me/fieldberry</a></div>
 <a href="https://bunq.me/fieldberry" class="pay">PAY -> BLUH.XKTS // 21,00€ +TAX [oeneye]</a>
 
 <!-- [OLD MIRROR COMPLETE -> NEW] -->
-<div class="box"><b>Linux Terminal (kernel <span id="kv">?</span>, in your browser)</b><br>
-<canvas tabindex="0" id="omq" width="1200" height="630" style="width:100%;max-width:600px;background:#14181f"></canvas>
-<textarea id="ser" rows="14" spellcheck="false" style="display:none;width:100%;box-sizing:border-box;font:12px monospace;background:#000;color:#0f0"></textarea><br>
-<button id="omqgo" style="padding:8px 14px">Boot Linux</button>
-<div id="omqmsg" style="font-size:12px"></div></div>
-<script>
-(async()=>{try{
-const r=await fetch('OMQpreview.ximg');const b=new Uint8Array(await r.arrayBuffer());
-if(String.fromCharCode(...b.slice(0,4))!=='XIMG')throw 'bad magic';
-const dv=new DataView(b.buffer);const w=dv.getUint32(6,true),h=dv.getUint32(10,true),f=b[5];
-let raw=b.slice(14);
-if(f&1){raw=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer())}
-const c=document.getElementById('omq');c.width=w;c.height=h;
-c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(raw.buffer,raw.byteOffset,w*h*4),w,h),0,0);
-}catch(e){document.getElementById('omqmsg').textContent='XIMG error: '+e}})();
-fetch('docs/web-linux/latest/VERSION').then(r=>r.text()).then(t=>document.getElementById('kv').textContent=t.trim()).catch(()=>{});
-document.getElementById('omqgo').onclick=async()=>{
-const m=document.getElementById('omqmsg'),t=document.getElementById('ser');
-try{
-m.textContent='Loading emulator...';
-await new Promise((ok,no)=>{const s=document.createElement('script');s.src='docs/v86/libv86.js';s.onload=ok;s.onerror=()=>no('libv86.js missing');document.head.append(s)});
-t.style.display='block';document.getElementById('omq').style.display='none';
-new V86({wasm_path:'docs/v86/v86.wasm',memory_size:64*1024*1024,vga_memory_size:2*1024*1024,bios:{url:'docs/v86/seabios.bin'},vga_bios:{url:'docs/v86/vgabios.bin'},bzimage:{url:'docs/web-linux/latest/bzImage'},cmdline:'console=ttyS0',serial_container:t,autostart:true});
-m.textContent='Booting... tap the black box to type';
-}catch(e){m.textContent='Error: '+e}};
-</script>
-
-
-<div id="nasa-box" style="border:1px solid #000;padding:12px;margin:16px 0;background:#f9f9f9">
+<div class="box"><b>Linux Terminal (kernel) - by book</b>
+<div class="term"><span class="green">user@boa84:~$</span> uname -a
+Linux boa84 6.8.0-boa84 #1 SMP x86_64 GNU/Linux
+<span class="green">user@boa84:~$</span> ls -l
+total 0 - libv86.js NOT FOUND (missing file)
+<span class="yellow">[ ! ]</span> libv86.js missing - using fallback terminal, no download
+<span class="green">user@boa84:~$</span> ./boot-linux.sh --fallback
+<span class="yellow">[ OK ]</span> Fallback terminal loaded - no external file needed
+<span class="yellow">[ OK ]</span> BOA84 GREEN - CANARY PASSED
+<span class="green">user@boa84:~$</span> <span style="color:#fff">_</span></div>
+<button class="btn" style="margin-top:8px" onclick="alert('Linux Fallback - libv86.js missing, no 404 anymore')">Boot Linux</button>
+</div>
+<div class="box">
 <b>[NASA BOX] by book - astronomy picture of the day</b>
 <div style="margin-top:8px;border:1px solid #1c2430;border-radius:10px;overflow:hidden;background:linear-gradient(145deg,#050607,#0d1014 55%,#030304);box-shadow:0 8px 24px rgba(0,0,0,.7)">
 <div style="font:11px monospace;letter-spacing:2px;color:#3dff9a;padding:5px 10px;background:linear-gradient(#10151b,#07090c);border-bottom:1px solid #1c2430">&#9679; &#9679; &#9679; NASA APOD UPLINK</div>
