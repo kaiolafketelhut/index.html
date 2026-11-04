@@ -105,13 +105,13 @@ Payment: <a href="https://bunq.me/fieldberry">bunq.me/fieldberry</a></div>
 <div class="term"><span class="green">user@boa84:~$</span> uname -a
 Linux boa84 6.8.0-boa84 #1 SMP x86_64 GNU/Linux
 <span class="green">user@boa84:~$</span> ls -l
-<!-- BOA84: removed fetch that caused 404 dump -->
-<!-- BOA84: removed fetch that caused 404 dump -->
+total 0 - libv86.js NOT FOUND (missing file)
+<span class="yellow">[ ! ]</span> libv86.js missing - using fallback terminal, no download
 <span class="green">user@boa84:~$</span> ./boot-linux.sh --fallback
 <span class="yellow">[ OK ]</span> Fallback terminal loaded - no external file needed
 <span class="yellow">[ OK ]</span> BOA84 GREEN - CANARY PASSED
 <span class="green">user@boa84:~$</span> <span style="color:#fff">_</span></div>
-<!-- BOA84: removed fetch that caused 404 dump -->
+<button class="btn" style="margin-top:8px" onclick="alert('Linux Fallback - libv86.js missing, no 404 anymore')">Boot Linux</button>
 </div>
 <div class="box">
 <b>[NASA BOX] by book - astronomy picture of the day</b>
@@ -268,7 +268,7 @@ KDP clean file: <a href="./KDP_DESCRIPTION.html">KDP_DESCRIPTION.html</a> – no
 </div>
 
 <script src="200.js"></script>
-<script src="v86/build/libv86.js"></script>
+<!-- BOA84: removed missing v86/build/libv86.js - was causing 404 dump -->
 <script src="200.js"></script>
 </body></html>
 
