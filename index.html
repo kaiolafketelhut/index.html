@@ -352,41 +352,71 @@ document.getElementById('bluhPatternSelect').addEventListener('change', function
 </script>
 
 
-<script id="moveBluhToolbar">
-(function(){
-  function move(){
-    var bluhBar = document.getElementById('bluhToolbar');
-    if(!bluhBar) return;
-    // find BLUH input: try id, placeholder, or text near it
-    var input = document.getElementById('bx-in') || document.getElementById('bluhInput')
-      || document.querySelector('input[placeholder*="bluh"]')
-      || document.querySelector('textarea[placeholder*="bluh"]')
-      || document.querySelector('[id*="bluh" i][id*="input" i]');
-    // fallback: find element containing "> bluh" text
-    if(!input){
-      var all = document.querySelectorAll('input, textarea');
-      for(var i=0;i<all.length;i++){
-        var p = (all[i].placeholder||'') + ' ' + (all[i].getAttribute('aria-label')||'');
-        if(p.toLowerCase().includes('bluh')){ input = all[i]; break; }
-      }
-    }
-    if(!input) return;
-    // insert toolbar directly above the input's container
-    var target = input.parentElement || input;
-    // don't move if already there
-    if(target.previousElementSibling === bluhBar) return;
-    target.parentNode.insertBefore(bluhBar, target);
-    bluhBar.style.display = 'flex';
-    bluhBar.style.flexWrap = 'wrap';
-    bluhBar.style.gap = '4px';
-    bluhBar.style.marginBottom = '6px';
-    console.log('BLUH toolbar moved above bluh input');
+
+
+
+<script id="autoexec-debugger">
+/* AUTOEXEC + TASK MANAGER + DEBUGGER - by book */
+window.AUTOEXEC = window.AUTOEXEC || {};
+window.AUTOEXEC.log = [];
+function dbg(msg){
+  var t = new Date().toISOString().slice(11,19) + ' ' + msg;
+  window.AUTOEXEC.log.push(t);
+  console.log('[AUTOEXEC] ' + t);
+  var el = document.getElementById('dbg-out');
+  if(el) el.textContent = window.AUTOEXEC.log.slice(-12).join('\n');
+  var dot = document.getElementById('dbg-dot');
+  if(dot) dot.textContent = '● ' + msg;
+}
+function task_moveBluh(){
+  var bar = document.getElementById('bluhToolbar');
+  var input = document.getElementById('bx-in');
+  if(!bar){ dbg('TASK moveBluh: bluhToolbar NOT FOUND'); return false; }
+  if(!input){ dbg('TASK moveBluh: bx-in NOT FOUND'); return false; }
+  var target = input.parentElement || input;
+  if(target.previousElementSibling === bar){ dbg('TASK moveBluh: already OK above bx-in'); return true; }
+  target.parentNode.insertBefore(bar, target);
+  bar.style.display='flex'; bar.style.flexWrap='wrap'; bar.style.gap='4px'; bar.style.marginBottom='6px';
+  dbg('TASK moveBluh: MOVED above bx-in ✔');
+  return true;
+}
+function task_checkWrite(){
+  var w = document.getElementById('writeToolbar');
+  if(!w){ dbg('TASK checkWrite: writeToolbar NOT FOUND'); return; }
+  dbg('TASK checkWrite: writeToolbar OK, parent=' + (w.parentElement ? w.parentElement.tagName : '?'));
+}
+function task_checkBluhInput(){
+  var i = document.getElementById('bx-in');
+  dbg('TASK checkBluh: bx-in ' + (i ? 'OK placeholder=' + i.placeholder : 'MISSING'));
+}
+window.AUTOEXEC.tasks = [
+  {name:'moveBluh', fn:task_moveBluh, every:1000},
+  {name:'checkWrite', fn:task_checkWrite, every:5000},
+  {name:'checkBluh', fn:task_checkBluhInput, every:5000},
+];
+function autoexec_boot(){
+  dbg('AUTOEXEC boot - v23');
+  // 1. create debugger box at top of page if not exists
+  if(!document.getElementById('autoexec-dbg')){
+    var d = document.createElement('div');
+    d.id = 'autoexec-dbg';
+    d.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center"><b style="color:#0f0">AUTOEXEC / TASK MANAGER / DEBUGGER</b><span id="dbg-dot" style="color:#0f0;font-size:11px">● booting...</span><button onclick="document.getElementById(\'dbg-out\').style.display=document.getElementById(\'dbg-out\').style.display==\'none\'?\'block\':\'none\'" style="background:#222;color:#0f0;border:1px solid #0f0;padding:2px 6px;cursor:pointer">hide/show</button></div><pre id="dbg-out" style="margin:6px 0 0;color:#8f8;white-space:pre-wrap;font:11px monospace;max-height:120px;overflow:auto"></pre>';
+    d.style.cssText = 'background:#000;border:1px solid #0f0;color:#0f0;padding:8px;margin:8px;font:12px monospace;position:relative;z-index:9999';
+    document.body.insertBefore(d, document.body.firstChild);
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', move);
-  else move();
-  // retry once after 500ms in case BLUH BOX loads late
-  setTimeout(move, 500);
-})();
+  // 2. run tasks once now
+  task_moveBluh(); task_checkWrite(); task_checkBluhInput();
+  // 3. TASK MANAGER loop - retry move every 1s for 10s, then every 5s
+  var ticks = 0;
+  setInterval(function(){
+    ticks++;
+    task_moveBluh();
+    if(ticks % 5 === 0){ task_checkWrite(); task_checkBluhInput(); }
+  }, 1000);
+  dbg('TASK MANAGER started - loop 1s');
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', autoexec_boot);
+else autoexec_boot();
 </script>
 
 </body></html>
