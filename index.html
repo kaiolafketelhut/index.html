@@ -334,7 +334,7 @@ document.getElementById('patternSelect').addEventListener('change', function(){ 
   <button type="button" onclick="bluhInsertCodeBox()">+ Code Box</button>
 </div>
 <script>
-function getBluh(){ return document.querySelector('input[placeholder*="bluh"], input[id*="bluh" i], #bluhInput, input'); }
+function getBluh(){ return document.getElementById('bx-in') || document.getElementById('bluhInput'); }
 function bluhApplyStyle(){
   var ta=getBluh(); if(!ta) return;
   var s=document.getElementById('bluhStyleSelect').value; if(!s) return;
@@ -358,9 +358,9 @@ document.getElementById('bluhPatternSelect').addEventListener('change', function
     var bluhBar = document.getElementById('bluhToolbar');
     if(!bluhBar) return;
     // find BLUH input: try id, placeholder, or text near it
-    var input = document.getElementById('bluhInput')
-      || document.querySelector('input[placeholder*="bluh" i]')
-      || document.querySelector('textarea[placeholder*="bluh" i]')
+    var input = document.getElementById('bx-in') || document.getElementById('bluhInput')
+      || document.querySelector('input[placeholder*="bluh"]')
+      || document.querySelector('textarea[placeholder*="bluh"]')
       || document.querySelector('[id*="bluh" i][id*="input" i]');
     // fallback: find element containing "> bluh" text
     if(!input){
