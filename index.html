@@ -274,6 +274,83 @@ KDP clean file: <a href="./KDP_DESCRIPTION.html">KDP_DESCRIPTION.html</a> – no
 <script src="200.js"></script>
 <!-- BOA84: removed missing v86/build/libv86.js - was causing 404 dump -->
 <script src="200.js"></script>
+<!-- OMQpreview.ximg runtime - Copyright (c) kaiolafketelhut / index.html - Only hosted there, loaded via fetch, do not copy. -->
+<div id="writeToolbar" style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">
+  <select id="styleSelect">
+    <option value="">Text Style...</option>
+    <option value="b">Bold</option>
+    <option value="i">Italic</option>
+    <option value="u">Underline</option>
+    <option value="code">Code</option>
+    <option value="pre">Code Box</option>
+    <option value="h2">Heading H2</option>
+  </select>
+  <select id="patternSelect">
+    <option value="">Pattern...</option>
+    <option value="Hi.c">Hi.c - OENEYE</option>
+    <option value="ornop">ornop.qasm</option>
+    <option value="MOSFETQ">MOSFETQ</option>
+    <option value="BLUH">BLUH.XKTS</option>
+    <option value="EMAIL">Email -1 / ;</option>
+  </select>
+  <button type="button" onclick="applyStyle()">Apply Style</button>
+  <button type="button" onclick="insertCodeBox()">+ Code Box</button>
+</div>
+<script>
+function getWrite(){ return document.querySelector('textarea'); }
+function applyStyle(){
+  var ta=getWrite(); if(!ta) return;
+  var s=document.getElementById('styleSelect').value; if(!s) return;
+  var a=ta.selectionStart, b=ta.selectionEnd, sel=ta.value.slice(a,b)||"text";
+  var w={"b":["<b>","</b>"],"i":["<i>","</i>"],"u":["<u>","</u>"],"code":["<code>","</code>"],"pre":["<pre>\n","\n</pre>"],"h2":["<h2>","</h2>"]}[s];
+  ta.value=ta.value.slice(0,a)+w[0]+sel+w[1]+ta.value.slice(b); ta.focus();
+}
+function insertCodeBox(){
+  var ta=getWrite(); if(!ta) return;
+  var pat=document.getElementById('patternSelect').value||"Hi.c";
+  var box="\n<pre>\n["+pat+" BOX] by book\n</pre>\n";
+  var a=ta.selectionStart; ta.value=ta.value.slice(0,a)+box+ta.value.slice(a); ta.focus();
+}
+document.getElementById('patternSelect').addEventListener('change', function(){ if(this.value) insertCodeBox(); });
+</script>
+<div id="bluhToolbar" style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">
+  <select id="bluhStyleSelect">
+    <option value="">Text Style...</option>
+    <option value="b">Bold</option>
+    <option value="i">Italic</option>
+    <option value="code">Code</option>
+    <option value="pre">Code Box</option>
+    <option value="bluh">BLUH ::</option>
+  </select>
+  <select id="bluhPatternSelect">
+    <option value="">Pattern...</option>
+    <option value="Hi.c">Hi.c - OENEYE</option>
+    <option value="ornop">ornop.qasm</option>
+    <option value="MOSFETQ">MOSFETQ</option>
+    <option value="BLUH">BLUH.XKTS</option>
+    <option value="EMAIL">Email -1 / ;</option>
+  </select>
+  <button type="button" onclick="bluhApplyStyle()">Apply Style</button>
+  <button type="button" onclick="bluhInsertCodeBox()">+ Code Box</button>
+</div>
+<script>
+function getBluh(){ return document.querySelector('input[placeholder*="bluh"], input[id*="bluh" i], #bluhInput, input'); }
+function bluhApplyStyle(){
+  var ta=getBluh(); if(!ta) return;
+  var s=document.getElementById('bluhStyleSelect').value; if(!s) return;
+  var a=ta.selectionStart||0, b=ta.selectionEnd||0, sel=ta.value.slice(a,b)||"text";
+  var w={"b":["<b>","</b>"],"i":["<i>","</i>"],"code":["<code>","</code>"],"pre":["<pre>\n","\n</pre>"],"bluh":["BLUH :: ",""]}[s];
+  ta.value=ta.value.slice(0,a)+w[0]+sel+w[1]+ta.value.slice(b); ta.focus();
+}
+function bluhInsertCodeBox(){
+  var ta=getBluh(); if(!ta) return;
+  var pat=document.getElementById('bluhPatternSelect').value||"BLUH";
+  var box="\n<pre>\n["+pat+" BOX] by book\n</pre>\n";
+  var a=ta.selectionStart||ta.value.length; ta.value=ta.value.slice(0,a)+box+ta.value.slice(a); ta.focus();
+}
+document.getElementById('bluhPatternSelect').addEventListener('change', function(){ if(this.value) bluhInsertCodeBox(); });
+</script>
+
 </body></html>
 
 <!-- BOA84 MAIL - OneEyeMail - User can make email + write -->
