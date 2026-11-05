@@ -351,6 +351,44 @@ function bluhInsertCodeBox(){
 document.getElementById('bluhPatternSelect').addEventListener('change', function(){ if(this.value) bluhInsertCodeBox(); });
 </script>
 
+
+<script id="moveBluhToolbar">
+(function(){
+  function move(){
+    var bluhBar = document.getElementById('bluhToolbar');
+    if(!bluhBar) return;
+    // find BLUH input: try id, placeholder, or text near it
+    var input = document.getElementById('bluhInput')
+      || document.querySelector('input[placeholder*="bluh" i]')
+      || document.querySelector('textarea[placeholder*="bluh" i]')
+      || document.querySelector('[id*="bluh" i][id*="input" i]');
+    // fallback: find element containing "> bluh" text
+    if(!input){
+      var all = document.querySelectorAll('input, textarea');
+      for(var i=0;i<all.length;i++){
+        var p = (all[i].placeholder||'') + ' ' + (all[i].getAttribute('aria-label')||'');
+        if(p.toLowerCase().includes('bluh')){ input = all[i]; break; }
+      }
+    }
+    if(!input) return;
+    // insert toolbar directly above the input's container
+    var target = input.parentElement || input;
+    // don't move if already there
+    if(target.previousElementSibling === bluhBar) return;
+    target.parentNode.insertBefore(bluhBar, target);
+    bluhBar.style.display = 'flex';
+    bluhBar.style.flexWrap = 'wrap';
+    bluhBar.style.gap = '4px';
+    bluhBar.style.marginBottom = '6px';
+    console.log('BLUH toolbar moved above bluh input');
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', move);
+  else move();
+  // retry once after 500ms in case BLUH BOX loads late
+  setTimeout(move, 500);
+})();
+</script>
+
 </body></html>
 
 <!-- BOA84 MAIL - OneEyeMail - User can make email + write -->
