@@ -4,7 +4,11 @@
 <body><div class="wrap">
 <div class="ava">M</div>
 <h1>KAI OLAF KETELHUT</h1>
-<p>MOSFETQismsOENEYE.exe • ISMS v38 • Berlin<br>MOSFETQ – Technologie als Gesellschaftstreiber</p>
+<div style="display:flex;gap:8px;justify-content:center;margin:0 0 12px">
+<div style="background:#111;border:1px solid #333;border-radius:10px;padding:8px 12px;font-size:12px">👁️ <b id="visits">—</b> Besuche</div>
+<div style="background:#111;border:1px solid #333;border-radius:10px;padding:8px 12px;font-size:12px">🟢 <b>LIVE</b> • <span id="updated"></span></div>
+</div>
+<p>MOSFETQismsOENEYE.exe • ISMS v39 • Berlin<br>MOSFETQ – Technologie als Gesellschaftstreiber</p>
 <a class="green" href="index.html">🟢 LIVE ISMS SYSTEM<small>Autoexec • Policy Check • Self-Heal • Live Logs</small></a>
 <a class="gold" href="isms.html">📖 ISMS ERKLÄRT<small>Was ist MOSFETQismsOENEYE.exe? + QR Codes</small></a>
 <a href="flyer.html">🖨 FLYER — ENGLISH<small>A4 Poster • 2 QRs • Print / PDF</small></a>
@@ -13,12 +17,22 @@
 <a class="grey" href="https://kaiolafketelhut.github.io/isms.html">🔗 SHARE THIS PAGE<small>kaiolafketelhut.github.io/links.html</small></a>
 <div style="display:flex;gap:8px;margin:4px 0">
 <button onclick="copyLink()" style="flex:1;background:#fff;color:#000;border:none;padding:12px;border-radius:12px;font-weight:bold;cursor:pointer">📋 COPY LINK</button>
-<a href="https://wa.me/?text=MOSFETQismsOENEYE.exe%20-%20ISMS%20v38%20von%20Kai%20Olaf%20Ketelhut%20https%3A%2F%2Fkaiolafketelhut.github.io%2Flinks.html" target="_blank" style="flex:1;background:#25D366;color:#fff;padding:12px;border-radius:12px;margin:0">💬 WHATSAPP SHARE</a>
+<a href="https://wa.me/?text=MOSFETQismsOENEYE.exe%20-%20ISMS%20v39%20von%20Kai%20Olaf%20Ketelhut%20https%3A%2F%2Fkaiolafketelhut.github.io%2Flinks.html" target="_blank" style="flex:1;background:#25D366;color:#fff;padding:12px;border-radius:12px;margin:0">💬 WHATSAPP SHARE</a>
 </div>
 <div id="copied" style="display:none;color:#0f0;font-size:13px;margin:4px 0">✔ Link kopiert! / Link copied!</div>
 <script>
 function copyLink(){ const u="https://kaiolafketelhut.github.io/links.html"; if(navigator.clipboard){navigator.clipboard.writeText(u).then(()=>{document.getElementById('copied').style.display='block'})} else { const i=document.createElement('input'); i.value=u; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); document.getElementById('copied').style.display='block'; } }
 </script>
 <div style="margin:16px 0;background:#111;padding:12px;border-radius:12px"><div style="font-size:12px;color:#aaa">SCAN FOR ALL LINKS</div><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=ffffff&bgcolor=000000&data=https://kaiolafketelhut.github.io/links.html" style="width:150px;height:150px;margin-top:8px"><div style="font-size:12px;color:#aaa;margin-top:6px">1 QR = Alle Links</div></div>
-<div class="foot">MOSFETQismsOENEYE.exe ISMS v38 • Fieldberry Group Berlin • 14. Auflage 2021<br>✔ CERTIFIED PASS • SELF-HEALING • AUDITED</div>
-</div></body></html>
+<div class="foot">MOSFETQismsOENEYE.exe ISMS v39 • Fieldberry Group Berlin • 14. Auflage 2021<br>✔ CERTIFIED PASS • SELF-HEALING • AUDITED</div>
+</div><script>
+document.getElementById('updated').textContent = new Date().toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) + ' ' + new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'});
+try{
+  let c = parseInt(localStorage.getItem('mosfetq_visits')||'0')+1;
+  localStorage.setItem('mosfetq_visits', c);
+  document.getElementById('visits').textContent = c + (c===1?' Besuch':' Besuche (dieses Gerät)');
+}catch(e){ document.getElementById('visits').textContent = 'LIVE'; }
+// Global counter via free counter image - counts all visitors
+</script>
+<div style="margin-top:10px"><img src="https://api.countapi.xyz/hit/kaiolafketelhut.github.io/links" style="display:none" onerror="this.style.display='none'"></div>
+</body></html>
