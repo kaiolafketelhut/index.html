@@ -41,6 +41,20 @@ jobs:
           assert 'FAT77-ADVANCED-SIG' in header, 'Missing advanced FAT77 signature!'
           "
 
+      - name: Install Python PDF Dependencies
+        run: |
+          pip install reportlab
+
+      - name: Generate Pipeline PDF Report
+        run: |
+          python3 generate_report.py
+
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fat77-pipeline-report
+          path: fat77_pipeline_report.pdf
+
       - name: Build SAM Application
         run: |
           sam build
