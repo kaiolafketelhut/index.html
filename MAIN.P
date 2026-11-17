@@ -11,31 +11,28 @@ void main() {
         foreach (x; 0..w) {
             ubyte v = 0;
             // body: ellipse
-            double b = ((x-60.0)*(x-60.0))/(18.0*18.0) + ((y-38.0)*(y-38.0))/(18.0*18.0);
+            double b = ((x-56.0)*(x-56.0))/(24.0*24.0) + ((y-38.0)*(y-38.0))/(14.0*14.0);
             if (b < 1) v = 255;
-            // head: circle on top
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-18)*(y-18))) < 10) v = 255;
-            // comb: 3 bumps on top
-            if (sqrt(cast(double)((x-54)*(x-54) + (y-8)*(y-8))) < 3) v = 255;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-6)*(y-6))) < 3) v = 255;
-            if (sqrt(cast(double)((x-66)*(x-66) + (y-8)*(y-8))) < 3) v = 255;
-            // beak: triangle right
-            if (x >= 68 && x <= 74 && y >= 16 && y <= 16 + (74 - x)) v = 255;
-            if (x >= 68 && x <= 74 && y >= 20 && y <= 20 + (x - 68)) v = 255;
+            // head: circle
+            if (sqrt(cast(double)((x-76)*(x-76) + (y-22)*(y-22))) < 11) v = 255;
+            // beak: flat bar right
+            if (x >= 86 && x <= 96 && y >= 20 && y <= 25) v = 255;
             // eye: black dot
-            if (sqrt(cast(double)((x-62)*(x-62) + (y-16)*(y-16))) < 2) v = 0;
-            // wattle: small circle below beak
-            if (sqrt(cast(double)((x-64)*(x-64) + (y-26)*(y-26))) < 3) v = 255;
-            // tail: 3 feathers left
-            if (x >= 38 && x <= 44 && y >= 18 && y <= 18 + (x - 38)) v = 255;
-            if (x >= 36 && x <= 42 && y >= 24 && y <= 24 + (x - 36)) v = 255;
-            if (x >= 38 && x <= 44 && y >= 30 && y <= 30 + (x - 38)) v = 255;
+            if (sqrt(cast(double)((x-78)*(x-78) + (y-20)*(y-20))) < 2) v = 0;
+            // neck: bar connecting head to body
+            if (x >= 68 && x <= 76 && y >= 24 && y <= 36) v = 255;
+            // tail: triangle left
+            if (x >= 28 && x <= 36 && y >= 28 && y <= 28 + (36 - x)) v = 255;
+            if (x >= 28 && x <= 36 && y >= 34 && y <= 34 + (x - 28)) v = 255;
+            // wing: arc cut out
+            double wg = ((x-54.0)*(x-54.0))/(14.0*14.0) + ((y-38.0)*(y-38.0))/(7.0*7.0);
+            if (wg < 1) v = 0;
             // legs: 2 bars
-            if (x >= 54 && x <= 57 && y >= 54 && y <= 60) v = 255;
-            if (x >= 63 && x <= 66 && y >= 54 && y <= 60) v = 255;
-            // feet: 2 small bars
-            if (x >= 50 && x <= 60 && y >= 59 && y <= 61) v = 255;
-            if (x >= 59 && x <= 69 && y >= 59 && y <= 61) v = 255;
+            if (x >= 48 && x <= 51 && y >= 50 && y <= 58) v = 255;
+            if (x >= 62 && x <= 65 && y >= 50 && y <= 58) v = 255;
+            // feet: 2 flat bars
+            if (x >= 44 && x <= 54 && y >= 57 && y <= 60) v = 255;
+            if (x >= 58 && x <= 68 && y >= 57 && y <= 60) v = 255;
             raw ~= v;
         }
     }
@@ -43,7 +40,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm44.ximg", header ~ comp);
-    std.file.write("rm44.raw", raw);
-    writefln("made rm44.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm45.ximg", header ~ comp);
+    std.file.write("rm45.raw", raw);
+    writefln("made rm45.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
