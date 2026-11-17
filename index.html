@@ -696,6 +696,9 @@ function boa84SaveDraft(){var m={type:"draft",to:document.getElementById("mailTo
 function boa84SendMail(){var to=document.getElementById("mailTo").value,su=document.getElementById("mailSubject").value,bo=document.getElementById("mailBody").value;if(!to){document.getElementById("mailStatus").textContent="Add To email first";return}var a=boa84GetMails();a.push({type:"sent",to:to,subject:su,body:bo});localStorage.setItem("boa84_mails",JSON.stringify(a));document.getElementById("mailStatus").textContent="Sent! Opening mail app...";boa84ShowMails();window.location.href="mailto:"+encodeURIComponent(to)+"?subject="+encodeURIComponent(su)+"&body="+encodeURIComponent(bo)}
 boa84ShowMails();
 
+<img src="kdp.png" alt="kdp.ximg 120x64">
+<p>XIMG 120x64 - 161 bytes compressed -> 7680 bytes raw</p>
+
 <!-- KDP.XIMG - TIER Project -->
 <section style="font-family: monospace; padding: 20px; background: #000; color: #fff; text-align: center;">
   <h2>kdp.ximg - 120 x 64 XIMG Image</h2>
@@ -712,3 +715,5 @@ boa84ShowMails();
 
 </script>
 
+<!-- XIMG EDITOR -->
+<p style="text-align:center"><a href="ximg_editor.html" style="color:#0ff;font-family:monospace">🧬 Open XIMG Registry Editor - Edit kdp.ximg</a></p>
