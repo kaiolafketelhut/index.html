@@ -16,7 +16,11 @@ a{color:#0ff}
 <div class="box">
 <b>1. Load</b><br>
 <input type="file" id="f" accept=".ximg,.raw"><br>
-<button onclick="loadDefault()">Load kdp.ximg from this repo</button>
+<select id="fileSel" style="background:#111;color:#fff;border:1px solid #333;padding:8px">
+<option value="kdp.ximg">kdp.ximg - KDP / TIER</option>
+<option value="rm.ximg">rm.ximg - RM / Registry Manager</option>
+</select>
+<button onclick="loadDefault()">Load Selected</button>
 <button onclick="newBlank()">New Blank 120x64</button>
 </div>
 
@@ -85,8 +89,8 @@ async function parseXIMG(buf){
   cv.width=W;cv.height=H;draw();
 }
 async function loadDefault(){
-  let r=await fetch('kdp.ximg');let b=await r.arrayBuffer();await parseXIMG(b);
-  document.getElementById('out').textContent='Loaded kdp.ximg from repo ✅';
+  let r=await fetch(document.getElementById('fileSel').value);let b=await r.arrayBuffer();await parseXIMG(b);
+  document.getElementById('out').textContent='Loaded '+document.getElementById('fileSel').value+' ✅';
 }
 document.getElementById('f').addEventListener('change',async e=>{
   let b=await e.target.files[0].arrayBuffer();

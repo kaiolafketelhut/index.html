@@ -18,7 +18,13 @@ canvas{image-rendering:pixelated;border:2px solid #fff;max-width:100%}
 <div class="box">
 <b>1. Load</b>
 <input type="file" id="f" accept=".raw,.ximg">
-<button onclick="loadDefault()">Load kdp.raw from repo</button>
+<select id="fileSel2" style="background:#111;color:#fff;border:1px solid #333;padding:8px">
+<option value="kdp.raw">kdp.raw - KDP 7680</option>
+<option value="rm.raw">rm.raw - RM 7680</option>
+<option value="kdp.ximg">kdp.ximg - KDP XIMG</option>
+<option value="rm.ximg">rm.ximg - RM XIMG</option>
+</select>
+<button onclick="loadDefault()">Load Selected</button>
 <button onclick="fillPattern()">Fill 14 18 20 FF</button>
 <button onclick="fillVal(0)">Fill 00</button>
 <button onclick="fillVal(255)">Fill FF</button>
@@ -98,8 +104,15 @@ function find(){
 function fillPattern(){let p=[0x14,0x18,0x20,0xFF];for(let i=0;i<raw.length;i++)raw[i]=p[i%4];drawPreview();renderHex();}
 function fillVal(v){raw.fill(v);drawPreview();renderHex();}
 async function loadDefault(){
-  let r=await fetch('kdp.raw');let b=await r.arrayBuffer();raw=new Uint8Array(b);
-  document.getElementById('out').textContent='Loaded kdp.raw ✅ '+raw.length+' bytes';
+  let fn=document.getElementById('fileSel2').value;
+  let r=await fetch(fn);let b=await r.arrayBuffer();
+  if(fn.endsWith('.ximg')){
+    let d=new Uint8Array(b);
+    let ds=new DecompressionStream('deflate');
+    let rb=await new Response(new Blob([d.slice(14)]).stream().pipeThrough(ds)).arrayBuffer();
+    raw=new Uint8Array(rb);
+  } else raw=new Uint8Array(b);
+  document.getElementById('out').textContent='Loaded '+document.getElementById('fileSel2').value+' ✅ '+raw.length+' bytes';
   drawPreview();renderHex();
 }
 document.getElementById('f').addEventListener('change',async e=>{
