@@ -41,13 +41,10 @@ jobs:
           assert 'FAT77-ADVANCED-SIG' in header, 'Missing advanced FAT77 signature!'
           "
 
-      - name: Install Python PDF Dependencies
+      - name: Compile Native C PDF Generator
         run: |
-          pip install reportlab
-
-      - name: Generate Pipeline PDF Report
-        run: |
-          python3 generate_report.py
+          gcc oeneyepdf.c -o oeneyepdf
+          ./oeneyepdf
 
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4
