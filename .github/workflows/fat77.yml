@@ -22,7 +22,7 @@ jobs:
         run: |
           rdmd parse_lib.d
 
-      - name: Build FAT77 Image
+      - name: Build Advanced FAT77 Image
         run: |
           rdmd FAT77.d
           ls -lh fat77.img
@@ -32,8 +32,8 @@ jobs:
           python3 -c "
           with open('fat77.img', 'rb') as f:
               data = f.read()
-          assert len(data) == 16384, 'Incorrect image size!'
+          assert len(data) == 32768, f'Incorrect image size: {len(data)} bytes!'
           header = data[:100].decode('utf-8', errors='ignore')
           print('Verified image header:', header)
-          assert 'FAT77-SIG' in header, 'Missing FAT77 signature!'
+          assert 'FAT77-ADVANCED-SIG' in header, 'Missing advanced FAT77 signature!'
           "
