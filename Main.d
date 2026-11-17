@@ -5,6 +5,7 @@ import std.bitmanip;
 import std.math;
 import std.net.curl;
 import std.json;
+import std.string;
 import std.process : environment;
 import std.digest.sha;
 
@@ -20,10 +21,21 @@ void main() {
 
     ubyte[] combinedPayload;
     bool samActive = false;
+    string regStatus = "Unknown";
+    string expDate = "Unknown";
+    string cageCode = "Unknown";
+    string[] naicsList;
 
     foreach (name, url; endpoints) {
         try {
-            auto client = HTTP(url);
+            string finalUrl = url;
+            if (name.length >= 4 && name[0..4] == "SAM_") {
+                finalUrl ~= (url.indexOf('?') >= 0 ? "&" : "?") ~ "api_key=" ~ samKey;
+            } else {
+                finalUrl ~= (url.indexOf('?') >= 0 ? "&" : "?") ~ "api_key=" ~ gsaKey;
+            }
+
+            auto client = HTTP(finalUrl);
             client.addRequestHeader("x-api-key", name.length >= 4 && name[0..4] == "SAM_" ? samKey : gsaKey);
             client.addRequestHeader("Accept", "application/json");
 
@@ -42,9 +54,21 @@ void main() {
                 if (name == "SAM_Entity") {
                     auto parsed = parseJSON(cast(string)responseData);
                     if ("entityData" in parsed && parsed["entityData"].array.length > 0) {
-                        auto regStatus = parsed["entityData"][0]["entityRegistration"]["registrationStatus"].str;
+                        auto ent = parsed["entityData"][0];
+                        auto reg = ent["entityRegistration"];
+                        regStatus = reg["registrationStatus"].str;
+                        expDate   = ("registrationExpirationDate" in reg) ? reg["registrationExpirationDate"].str : "N/A";
+                        cageCode  = ("cageCode" in reg) ? reg["cageCode"].str : "N/A";
                         samActive = (regStatus == "Active");
-                        writefln("          Entity Status: %s", regStatus);
+
+                        if ("assertions" in ent && "goodsAndServices" in ent["assertions"] && "naicsList" in ent["assertions"]["goodsAndServices"]) {
+                            foreach (item; ent["assertions"]["goodsAndServices"]["naicsList"].array) {
+                                if ("naicsCode" in item) {
+                                    naicsList ~= item["naicsCode"].str;
+                                }
+                            }
+                        }
+                        writefln("          Entity: %s | CAGE: %s | Expires: %s", regStatus, cageCode, expDate);
                     }
                 }
             } else {
@@ -56,7 +80,19 @@ void main() {
     }
 
     auto digest = sha256Of(combinedPayload);
-    writefln("Valid payload: %s bytes | SHA-256: %s", combinedPayload.length, toHexString(digest));
+    string hexDigest = toHexString(digest).idup;
+    writefln("Valid payload: %s bytes | SHA-256: %s", combinedPayload.length, hexDigest);
+
+    JSONValue manifest = JSONValue([
+        "uei": JSONValue("VQE1VLLCX2N4"),
+        "cage": JSONValue(cageCode),
+        "status": JSONValue(regStatus),
+        "expirationDate": JSONValue(expDate),
+        "naics": JSONValue(naicsList),
+        "payloadBytes": JSONValue(combinedPayload.length),
+        "sha256": JSONValue(hexDigest)
+    ]);
+    std.file.write("sam_status.json", manifest.toPrettyString() ~ "\n");
 
     int w = 120, h = 64;
     ubyte[] raw;
@@ -93,5 +129,5 @@ void main() {
     auto comp = compress(raw);
     std.file.write("rm63.ximg", header ~ comp);
     std.file.write("rm63.raw", raw);
-    writefln("Wrote rm63.ximg (%s bytes) and rm63.raw (%s bytes)", header.length + comp.length, raw.length);
+    writefln("Wrote rm63.ximg (%s bytes) and sam_status.json", header.length + comp.length);
 }
