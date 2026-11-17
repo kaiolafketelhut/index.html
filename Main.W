@@ -4,40 +4,59 @@ import std.zlib;
 import std.bitmanip;
 import std.math;
 import std.net.curl;
+import std.json;
+import std.process : environment;
+import std.digest.sha;
 
 void main() {
+    string samKey = environment.get("SAM_API_KEY", "SAM-83324032-b7c5-4832-860f-7339d8ac54c6");
+    string gsaKey = environment.get("GSA_API_KEY", "DEMO_KEY");
+
     string[string] endpoints = [
-        "PerDiem"     : "https://api.gsa.gov/travel/perdiem/v2/rates/conus/lodging/2026",
-        "DataGov_v4"  : "https://api.gsa.gov/technology/datagov/v4/search?q=climate",
-        "CALC_Rates"  : "https://api.gsa.gov/acquisition/calc/v3/api/ceilingrates/?q=engineer",
-        "Analytics"   : "https://api.gsa.gov/analytics/dap/v2/reports/site/data",
-        "SAM_Entity"  : "https://api.sam.gov/entity-information/v3/entities?ueiSAM=VQE1VLLCX2N4"
+        "SAM_Entity" : "https://api.sam.gov/entity-information/v3/entities?ueiSAM=VQE1VLLCX2N4",
+        "SAM_Opps"   : "https://api.sam.gov/opportunities/v2/search?limit=5&postedFrom=01/01/2026&postedTo=11/17/2026",
+        "PerDiem"    : "https://api.gsa.gov/travel/perdiem/v2/rates/conus/lodging/2026"
     ];
 
-    size_t totalBytes = 0;
+    ubyte[] combinedPayload;
+    bool samActive = false;
+
     foreach (name, url; endpoints) {
         try {
             auto client = HTTP(url);
-            if (name == "SAM_Entity") {
-                client.addRequestHeader("x-api-key", "SAM-83324032-b7c5-4832-860f-7339d8ac54c6");
-            } else {
-                client.addRequestHeader("x-api-key", "DEMO_KEY");
-            }
+            client.addRequestHeader("x-api-key", name.length >= 4 && name[0..4] == "SAM_" ? samKey : gsaKey);
             client.addRequestHeader("Accept", "application/json");
-            
+
             ubyte[] responseData;
             client.onReceive = (ubyte[] data) {
                 responseData ~= data;
                 return data.length;
             };
             client.perform();
-            totalBytes += responseData.length;
-            writefln("[OK] %-12s -> %s bytes", name, responseData.length);
+
+            auto status = client.statusLine.code;
+            if (status == 200) {
+                combinedPayload ~= responseData;
+                writefln("[200 OK]  %-11s -> %s bytes", name, responseData.length);
+
+                if (name == "SAM_Entity") {
+                    auto parsed = parseJSON(cast(string)responseData);
+                    if ("entityData" in parsed && parsed["entityData"].array.length > 0) {
+                        auto regStatus = parsed["entityData"][0]["entityRegistration"]["registrationStatus"].str;
+                        samActive = (regStatus == "Active");
+                        writefln("          Entity Status: %s", regStatus);
+                    }
+                }
+            } else {
+                writefln("[%d ERR] %-11s -> %s", status, name, cast(string)responseData);
+            }
         } catch (Exception e) {
-            writefln("[ERR] %-11s -> %s", name, e.msg);
+            writefln("[FAIL]    %-11s -> %s", name, e.msg);
         }
     }
-    writefln("Total payload fetched: %s bytes", totalBytes);
+
+    auto digest = sha256Of(combinedPayload);
+    writefln("Valid payload: %s bytes | SHA-256: %s", combinedPayload.length, toHexString(digest));
 
     int w = 120, h = 64;
     ubyte[] raw;
@@ -57,14 +76,22 @@ void main() {
             if (x >= 14 && x <= 34 && abs(y - ty) < 3) v = 255;
             if (sqrt(cast(double)((x-50)*(x-50) + (y-38)*(y-38))) < 1.5) v = 0;
             if (sqrt(cast(double)((x-62)*(x-62) + (y-38)*(y-38))) < 1.5) v = 0;
+
+            if (x >= 2 && x <= 5 && y >= 2 && y <= 5) {
+                v = samActive ? 255 : 64;
+            }
+            if (y == 63 && x < 32) {
+                v = digest[x];
+            }
             raw ~= v;
         }
     }
+
     ubyte[] header = cast(ubyte[])"XIMG" ~ [cast(ubyte)1, cast(ubyte)1];
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
     std.file.write("rm63.ximg", header ~ comp);
     std.file.write("rm63.raw", raw);
-    writefln("made rm63.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    writefln("Wrote rm63.ximg (%s bytes) and rm63.raw (%s bytes)", header.length + comp.length, raw.length);
 }
