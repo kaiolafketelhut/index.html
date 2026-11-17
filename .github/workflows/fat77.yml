@@ -1,0 +1,39 @@
+name: FAT77 Build and Validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install LDC (D programming language compiler)
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ldc-latest
+
+      - name: Verify MAIN.LIB and parse
+        run: |
+          rdmd parse_lib.d
+
+      - name: Build FAT77 Image
+        run: |
+          rdmd FAT77.d
+          ls -lh fat77.img
+
+      - name: Validate Generated Image Size & Header
+        run: |
+          python3 -c "
+          with open('fat77.img', 'rb') as f:
+              data = f.read()
+          assert len(data) == 16384, 'Incorrect image size!'
+          header = data[:100].decode('utf-8', errors='ignore')
+          print('Verified image header:', header)
+          assert 'FAT77-SIG' in header, 'Missing FAT77 signature!'
+          "
