@@ -3,8 +3,27 @@ import std.file;
 import std.zlib;
 import std.bitmanip;
 import std.math;
+import std.net.curl;
 
 void main() {
+    writeln("Connecting to GSA Open API...");
+    try {
+        auto client = HTTP("https://api.gsa.gov/travel/perdiem/v2/rates/conus/lodging/2026");
+        client.addRequestHeader("x-api-key", "DEMO_KEY");
+        client.addRequestHeader("Accept", "application/json");
+        
+        ubyte[] responseData;
+        client.onReceive = (ubyte[] data) {
+            responseData ~= data;
+            return data.length;
+        };
+        client.perform();
+        
+        writeln("API Connection successful! Fetched ", responseData.length, " bytes.");
+    } catch (Exception e) {
+        writeln("API Connection Notice: ", e.msg);
+    }
+
     int w = 120, h = 64;
     ubyte[] raw;
     foreach (y; 0..h) {
