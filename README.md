@@ -31,3 +31,33 @@ Author: clevjhon (oeneye@proton.me)
 ## PPA - sandbox-ppa
 PPA: https://launchpad.net/~oeneye/+archive/ubuntu/sandbox-ppa
 Purpose: reproduce Xenial snap builder environment for Bug #2170612
+
+# index.html - Kai Olaf Ketelhut - GitHub Pages
+
+Live site: **https://kaiolafketelhut.github.io/index.html/**
+
+One file, two projects. All built in Termux on Android.
+
+## 1. BOA84 MAIL - OneEyeMail
+
+Make email + write, in the browser, no server.
+
+- To / Subject / Write
+- Save Draft / Send
+- Drafts / Sent list saved in `localStorage`
+- Section: `id="boa84-mail-box"` in `index.html`
+
+## 2. KDP.XIMG - TIER Project - 120 x 64 XIMG Image
+
+A mystery 161-byte file, reverse-engineered to a real image.
+
+| File | Size | What it is |
+| --- | --- | --- |
+| `kdp.ximg` | 161 bytes | XIMG container, `XIMG` + `01 01` + `78 9C` zlib at offset 14 |
+| `kdp.raw` | 7680 bytes | Decompressed: `120 x 64` = 7680, 1 byte per pixel, grayscale |
+| `kdp.png` | 1.2K | `120x64` enlarged to `480x256`, pixelated, for Pages |
+| `kdp_decode.py` | - | Decoder: `XIMG -> PNG`, pure Python + Pillow |
+| `index.html` | 714 lines | Shows `kdp.png` + download links |
+
+### Proof
+
