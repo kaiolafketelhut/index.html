@@ -10,27 +10,25 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            // body: ellipse
-            double b = ((x-60.0)*(x-60.0))/(20.0*20.0) + ((y-36.0)*(y-36.0))/(22.0*22.0);
-            if (b < 1) v = 255;
-            // ear tufts: 2 triangles
-            if (x >= 42 && x <= 50 && y >= 10 && y <= 10 + (x - 42)) v = 255;
-            if (x >= 70 && x <= 78 && y >= 10 && y <= 10 + (78 - x)) v = 255;
-            // eyes: 2 big white circles cut out
-            if (sqrt(cast(double)((x-52)*(x-52) + (y-26)*(y-26))) < 7) v = 0;
-            if (sqrt(cast(double)((x-68)*(x-68) + (y-26)*(y-26))) < 7) v = 0;
-            // pupils: black dots back
-            if (sqrt(cast(double)((x-52)*(x-52) + (y-26)*(y-26))) < 2.5) v = 255;
-            if (sqrt(cast(double)((x-68)*(x-68) + (y-26)*(y-26))) < 2.5) v = 255;
-            // beak: small triangle
-            if (x >= 58 && x <= 62 && y >= 32 && y <= 32 + (2 - abs(x - 60)) * 2) v = 0;
-            // belly: stripes cut out - 3 arcs
-            if (y == 42 && x >= 46 && x <= 74) v = 0;
-            if (y == 46 && x >= 47 && x <= 73) v = 0;
-            if (y == 50 && x >= 48 && x <= 72) v = 0;
-            // feet: 2 bars
-            if (x >= 50 && x <= 56 && y >= 57 && y <= 60) v = 255;
-            if (x >= 64 && x <= 70 && y >= 57 && y <= 60) v = 255;
+            // ears: 2 circles on sides
+            if (sqrt(cast(double)((x-40)*(x-40) + (y-32)*(y-32))) < 8) v = 255;
+            if (sqrt(cast(double)((x-80)*(x-80) + (y-32)*(y-32))) < 8) v = 255;
+            // head: circle
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-32)*(y-32))) < 18) v = 255;
+            // face: heart-ish cut out - 2 circles + muzzle
+            if (sqrt(cast(double)((x-54)*(x-54) + (y-28)*(y-28))) < 8) v = 0;
+            if (sqrt(cast(double)((x-66)*(x-66) + (y-28)*(y-28))) < 8) v = 0;
+            double mz = ((x-60.0)*(x-60.0))/(10.0*10.0) + ((y-38.0)*(y-38.0))/(6.0*6.0);
+            if (mz < 1) v = 0;
+            // eyes: 2 black dots on face
+            if (sqrt(cast(double)((x-54)*(x-54) + (y-28)*(y-28))) < 2) v = 255;
+            if (sqrt(cast(double)((x-66)*(x-66) + (y-28)*(y-28))) < 2) v = 255;
+            // nose: 2 tiny dots
+            if (sqrt(cast(double)((x-58)*(x-58) + (y-37)*(y-37))) < 1.2) v = 255;
+            if (sqrt(cast(double)((x-62)*(x-62) + (y-37)*(y-37))) < 1.2) v = 255;
+            // smile: arc cut out in muzzle - actually black arc
+            double sm = sqrt(cast(double)((x-60)*(x-60) + (y-36)*(y-36)));
+            if (sm > 4 && sm < 6 && y > 38) v = 255;
             raw ~= v;
         }
     }
@@ -38,7 +36,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm37.ximg", header ~ comp);
-    std.file.write("rm37.raw", raw);
-    writefln("made rm37.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm38.ximg", header ~ comp);
+    std.file.write("rm38.raw", raw);
+    writefln("made rm38.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
