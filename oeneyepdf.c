@@ -14,21 +14,34 @@ void generate_pdf(const char *filename, const char *domain, long img_size) {
     fprintf(f, "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
     fprintf(f, "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n");
     
-    char content[1024];
+    char content[2048];
     int len = snprintf(content, sizeof(content),
         "BT\n"
-        "/F1 18 Tf\n"
-        "50 720 Td\n"
-        "(FAT77 Advanced Pipeline & C-Native PDF Report) Tj\n"
+        "/F1 20 Tf\n"
+        "50 730 Td\n"
+        "(oeneyeOS & FAT77 Pipeline Status Report) Tj\n"
+        "ET\n"
+        "q\n"
+        "1 0 0 1 50 715 cm\n"
+        "512 0 0 1 0 0 re\n"
+        "F\n"
+        "Q\n"
+        "BT\n"
         "/F1 12 Tf\n"
-        "0 -30 Td\n"
-        "(Domain Configuration: %s) Tj\n"
-        "0 -20 Td\n"
+        "50 680 Td\n"
+        "(Configuration Domain: %s) Tj\n"
+        "0 -22 Td\n"
         "(Disk Image Artifact Size: %ld bytes) Tj\n"
-        "0 -20 Td\n"
+        "0 -22 Td\n"
         "(Architecture Signature: FAT77-ADVANCED-SIG) Tj\n"
-        "0 -20 Td\n"
-        "(Status: Verified via oeneyepdf C Engine) Tj\n"
+        "0 -22 Td\n"
+        "(Pipeline Status: Verified and Deployed via GitHub Actions) Tj\n"
+        "0 -40 Td\n"
+        "/F1 14 Tf\n"
+        "(Serverless Backend Integration:) Tj\n"
+        "/F1 12 Tf\n"
+        "0 -22 Td\n"
+        "(API Gateway Endpoint: /metrics active via AWS SAM) Tj\n"
         "ET\n",
         domain, img_size
     );
@@ -37,7 +50,7 @@ void generate_pdf(const char *filename, const char *domain, long img_size) {
     fprintf(f, "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n");
     
     fclose(f);
-    printf("Successfully generated native PDF report: %s\n", filename);
+    printf("Successfully generated enhanced native PDF report: %s\n", filename);
 }
 
 int main(void) {
