@@ -9,34 +9,31 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            // body: small round frog - dart frog is tiny and round
-            double b = ((x-60.0)*(x-60.0))/(18.0*18.0) + ((y-38.0)*(y-38.0))/(14.0*14.0);
+            // body: BIG wide bullfrog ellipse
+            double b = ((x-60.0)*(x-60.0))/(30.0*30.0) + ((y-38.0)*(y-38.0))/(15.0*15.0);
             if (b < 1) v = 255;
-            // head: circle
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-26)*(y-26))) < 12) v = 255;
-            // big eyes: 2 circles
-            if (sqrt(cast(double)((x-53)*(x-53) + (y-22)*(y-22))) < 4) v = 255;
-            if (sqrt(cast(double)((x-53)*(x-53) + (y-22)*(y-22))) < 1.5) v = 0;
-            if (sqrt(cast(double)((x-67)*(x-67) + (y-22)*(y-22))) < 4) v = 255;
-            if (sqrt(cast(double)((x-67)*(x-67) + (y-22)*(y-22))) < 1.5) v = 0;
-            // spots: poison pattern - dots on back
-            if (sqrt(cast(double)((x-52)*(x-52) + (y-38)*(y-38))) < 2) v = 0;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-42)*(y-42))) < 2) v = 0;
-            if (sqrt(cast(double)((x-68)*(x-68) + (y-38)*(y-38))) < 2) v = 0;
-            if (sqrt(cast(double)((x-56)*(x-56) + (y-32)*(y-32))) < 2) v = 0;
-            if (sqrt(cast(double)((x-64)*(x-64) + (y-32)*(y-32))) < 2) v = 0;
-            // legs: 4 splayed legs
-            if (x >= 38 && x <= 46 && y >= 42 && y <= 44) v = 255;
-            if (x >= 74 && x <= 82 && y >= 42 && y <= 44) v = 255;
-            if (x >= 44 && x <= 48 && y >= 46 && y <= 48) v = 255;
-            if (x >= 72 && x <= 76 && y >= 46 && y <= 48) v = 255;
-            // toe pads: 4 dots
-            if (sqrt(cast(double)((x-38)*(x-38) + (y-43)*(y-43))) < 2) v = 255;
-            if (sqrt(cast(double)((x-82)*(x-82) + (y-43)*(y-43))) < 2) v = 255;
-            // leaf under frog: bar
-            if (x >= 30 && x <= 90 && y >= 52 && y <= 54) v = 255;
-            // smile: bar
-            if (x >= 56 && x <= 64 && y >= 30 && y <= 32) v = 0;
+            // head: wide circle
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-28)*(y-28))) < 16) v = 255;
+            // big bulging eyes: 2 circles on top
+            if (sqrt(cast(double)((x-48)*(x-48) + (y-18)*(y-18))) < 5) v = 255;
+            if (sqrt(cast(double)((x-48)*(x-48) + (y-18)*(y-18))) < 2) v = 0;
+            if (sqrt(cast(double)((x-72)*(x-72) + (y-18)*(y-18))) < 5) v = 255;
+            if (sqrt(cast(double)((x-72)*(x-72) + (y-18)*(y-18))) < 2) v = 0;
+            // eardrums: 2 big circles on sides - bullfrog trademark
+            if (sqrt(cast(double)((x-44)*(x-44) + (y-28)*(y-28))) < 4) v = 0;
+            if (sqrt(cast(double)((x-76)*(x-76) + (y-28)*(y-28))) < 4) v = 0;
+            // wide mouth: long bar
+            if (x >= 46 && x <= 74 && y >= 32 && y <= 34) v = 0;
+            // throat: big circle - for croaking
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-44)*(y-44))) < 8) v = 0;
+            // front legs: 2 bars
+            if (x >= 42 && x <= 46 && y >= 48 && y <= 54) v = 255;
+            if (x >= 74 && x <= 78 && y >= 48 && y <= 54) v = 255;
+            // back legs: 2 big folded bars
+            if (x >= 28 && x <= 36 && y >= 44 && y <= 54) v = 255;
+            if (x >= 84 && x <= 92 && y >= 44 && y <= 54) v = 255;
+            // water: 2 bars under frog
+            if (x >= 20 && x <= 100 && y >= 56 && y <= 58) v = 255;
             raw ~= v;
         }
     }
@@ -44,7 +41,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm66.ximg", header ~ comp);
-    std.file.write("rm66.raw", raw);
-    writefln("made rm66.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm67.ximg", header ~ comp);
+    std.file.write("rm67.raw", raw);
+    writefln("made rm67.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
