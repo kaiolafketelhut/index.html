@@ -1,0 +1,38 @@
+name: Federal API & Asset Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-pipeline:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up D programming language (LDC / DMD)
+        uses: dlang-community/setup-dlang@v1
+        with:
+          compiler: ldc-latest
+
+      - name: Compile and Execute Pipeline
+        env:
+          SAM_API_KEY: ${{ secrets.SAM_API_KEY }}
+          GSA_API_KEY: ${{ secrets.GSA_API_KEY }}
+        run: |
+          rdmd Main.d
+
+      - name: Commit and push updated rm63.ximg asset
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add rm63.ximg rm64.ximg sam_status.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update rm63.ximg asset via GitHub Actions [skip ci]" && git push)
