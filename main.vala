@@ -10,28 +10,28 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            // body: ellipse
-            double b = ((x-56.0)*(x-56.0))/(25.0*25.0) + ((y-38.0)*(y-38.0))/(11.0*11.0);
+            // body: big ellipse
+            double b = ((x-56.0)*(x-56.0))/(28.0*28.0) + ((y-38.0)*(y-38.0))/(12.0*12.0);
             if (b < 1) v = 255;
-            // head: circle right
-            if (sqrt(cast(double)((x-84)*(x-84) + (y-34)*(y-34))) < 10) v = 255;
-            // dewlap: triangle under head
-            if (x >= 80 && x <= 88 && y >= 42 && y <= 42 + (88 - x)) v = 255;
-            // dorsal spikes: small triangles on back
-            if (x >= 42 && x <= 46 && y >= 24 && y <= 24 + (x - 42)) v = 255;
-            if (x >= 54 && x <= 58 && y >= 24 && y <= 24 + (x - 54)) v = 255;
-            if (x >= 66 && x <= 70 && y >= 26 && y <= 26 + (x - 66)) v = 255;
+            // head: big circle right
+            if (sqrt(cast(double)((x-86)*(x-86) + (y-34)*(y-34))) < 12) v = 255;
+            // snout: bar right
+            if (x >= 92 && x <= 104 && y >= 34 && y <= 42) v = 255;
+            // forked tongue: 2 bars
+            if (x >= 104 && x <= 110 && y >= 36 && y <= 38) v = 255;
+            if (x >= 104 && x <= 110 && y >= 40 && y <= 42) v = 255;
             // eye: black dot
             if (sqrt(cast(double)((x-84)*(x-84) + (y-30)*(y-30))) < 2) v = 0;
-            // legs: 4 bars
-            if (x >= 40 && x <= 46 && y >= 46 && y <= 56) v = 255;
-            if (x >= 54 && x <= 60 && y >= 46 && y <= 56) v = 255;
-            if (x >= 66 && x <= 72 && y >= 46 && y <= 56) v = 255;
-            // tail: long bar left + taper
-            if (x >= 14 && x <= 32 && y >= 36 && y <= 40) v = 255;
-            // stripes on tail: black dots
-            if (sqrt(cast(double)((x-20)*(x-20) + (y-38)*(y-38))) < 1.5) v = 0;
-            if (sqrt(cast(double)((x-28)*(x-28) + (y-38)*(y-38))) < 1.5) v = 0;
+            // legs: 4 thick bars
+            if (x >= 38 && x <= 46 && y >= 46 && y <= 58) v = 255;
+            if (x >= 54 && x <= 62 && y >= 46 && y <= 58) v = 255;
+            if (x >= 68 && x <= 76 && y >= 46 && y <= 58) v = 255;
+            // tail: long thick bar left
+            if (x >= 12 && x <= 30 && y >= 36 && y <= 42) v = 255;
+            // back scales: black dots
+            if (sqrt(cast(double)((x-48)*(x-48) + (y-34)*(y-34))) < 2) v = 0;
+            if (sqrt(cast(double)((x-62)*(x-62) + (y-40)*(y-40))) < 2) v = 0;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-32)*(y-32))) < 2) v = 0;
             raw ~= v;
         }
     }
@@ -39,7 +39,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm59.ximg", header ~ comp);
-    std.file.write("rm59.raw", raw);
-    writefln("made rm59.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm60.ximg", header ~ comp);
+    std.file.write("rm60.raw", raw);
+    writefln("made rm60.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
