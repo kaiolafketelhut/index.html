@@ -13,13 +13,18 @@ void main() {
             // body: ellipse
             double b = ((x-56.0)*(x-56.0))/(24.0*24.0) + ((y-38.0)*(y-38.0))/(13.0*13.0);
             if (b < 1) v = 255;
+            // stripes: vertical black bars on body
+            if (b < 1 && ((x % 8) < 3)) v = 0;
             // neck: bar up right
             if (x >= 70 && x <= 78 && y >= 18 && y <= 34) v = 255;
             // head: long bar right
             if (x >= 76 && x <= 96 && y >= 16 && y <= 26) v = 255;
-            // long ears: 2 tall bars
-            if (x >= 74 && x <= 78 && y >= 6 && y <= 16) v = 255;
-            if (x >= 80 && x <= 84 && y >= 6 && y <= 16) v = 255;
+            // ears: 2 small triangles
+            if (x >= 74 && x <= 79 && y >= 10 && y <= 10 + (79 - x)) v = 255;
+            if (x >= 80 && x <= 85 && y >= 10 && y <= 10 + (x - 80)) v = 255;
+            // mane: dots
+            if (sqrt(cast(double)((x-72)*(x-72) + (y-18)*(y-18))) < 2) v = 255;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-26)*(y-26))) < 2) v = 255;
             // eye: black dot
             if (sqrt(cast(double)((x-82)*(x-82) + (y-20)*(y-20))) < 2) v = 0;
             // nostril: black dot
@@ -38,7 +43,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm49.ximg", header ~ comp);
-    std.file.write("rm49.raw", raw);
-    writefln("made rm49.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm50.ximg", header ~ comp);
+    std.file.write("rm50.raw", raw);
+    writefln("made rm50.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
