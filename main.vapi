@@ -9,20 +9,20 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            double b = ((x-60.0)*(x-60.0))/(22.0*22.0) + ((y-36.0)*(y-36.0))/(14.0*14.0);
+            double b = ((x-60.0)*(x-60.0))/(32.0*32.0) + ((y-40.0)*(y-40.0))/(18.0*18.0);
             if (b < 1) v = 255;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-26)*(y-26))) < 14) v = 255;
-            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 5) v = 255;
-            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 2) v = 0;
-            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 5) v = 255;
-            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 2) v = 0;
-            if (x >= 50 && x <= 70 && y >= 30 && y <= 31) v = 0;
-            if (x >= 40 && x <= 80 && y >= 38 && y <= 39) v = 0;
-            if (x >= 30 && x <= 38 && y >= 38 && y <= 50) v = 255;
-            if (x >= 82 && x <= 90 && y >= 38 && y <= 50) v = 255;
-            if (sqrt(cast(double)((x-32)*(x-32) + (y-52)*(y-52))) < 3) v = 255;
-            if (sqrt(cast(double)((x-88)*(x-88) + (y-52)*(y-52))) < 3) v = 255;
-            if (x >= 58 && x <= 62 && y >= 8 && y <= 58) v = 255;
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-30)*(y-30))) < 20) v = 255;
+            if (sqrt(cast(double)((x-47)*(x-47) + (y-21)*(y-21))) < 5) v = 255;
+            if (sqrt(cast(double)((x-47)*(x-47) + (y-21)*(y-21))) < 2) v = 0;
+            if (sqrt(cast(double)((x-73)*(x-73) + (y-21)*(y-21))) < 5) v = 255;
+            if (sqrt(cast(double)((x-73)*(x-73) + (y-21)*(y-21))) < 2) v = 0;
+            if (x >= 36 && x <= 84 && y >= 34 && y <= 36) v = 0;
+            if (x >= 42 && x <= 78 && y >= 48 && y <= 50) v = 0;
+            if (x >= 28 && x <= 38 && y >= 42 && y <= 58) v = 255;
+            if (x >= 82 && x <= 92 && y >= 42 && y <= 58) v = 255;
+            if (x >= 44 && x <= 48 && y >= 50 && y <= 56) v = 255;
+            if (x >= 72 && x <= 76 && y >= 50 && y <= 56) v = 255;
+            if (x >= 18 && x <= 102 && y >= 58 && y <= 60) v = 255;
             raw ~= v;
         }
     }
@@ -30,7 +30,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm75.ximg", header ~ comp);
-    std.file.write("rm75.raw", raw);
-    writefln("made rm75.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm76.ximg", header ~ comp);
+    std.file.write("rm76.raw", raw);
+    writefln("made rm76.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
