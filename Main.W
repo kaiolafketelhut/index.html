@@ -9,20 +9,19 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            double b = ((x-60.0)*(x-60.0))/(24.0*24.0) + ((y-38.0)*(y-38.0))/(14.0*14.0);
+            double b = ((x-60.0)*(x-60.0))/(30.0*30.0) + ((y-38.0)*(y-38.0))/(18.0*18.0);
             if (b < 1) v = 255;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-28)*(y-28))) < 15) v = 255;
-            if (sqrt(cast(double)((x-51)*(x-51) + (y-23)*(y-23))) < 5) v = 255;
-            if (sqrt(cast(double)((x-51)*(x-51) + (y-23)*(y-23))) < 2) v = 0;
-            if (sqrt(cast(double)((x-69)*(x-69) + (y-23)*(y-23))) < 5) v = 255;
-            if (sqrt(cast(double)((x-69)*(x-69) + (y-23)*(y-23))) < 2) v = 0;
-            if (x >= 50 && x <= 70 && y >= 32 && y <= 33) v = 0;
-            if (sqrt(cast(double)((x-52)*(x-52) + (y-38)*(y-38))) < 2) v = 0;
-            if (sqrt(cast(double)((x-68)*(x-68) + (y-38)*(y-38))) < 2) v = 0;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-44)*(y-44))) < 2) v = 0;
-            if (x >= 36 && x <= 42 && y >= 42 && y <= 54) v = 255;
-            if (x >= 78 && x <= 84 && y >= 42 && y <= 54) v = 255;
-            if (x >= 28 && x <= 92 && y >= 56 && y <= 58) v = 255;
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-28)*(y-28))) < 18) v = 255;
+            if (x >= 60 && x <= 90 && y >= 28 && y <= 44) {
+                if (fabs(cast(double)(y-36)) < (x-60)*0.5) v = 0;
+            }
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-18)*(y-18))) < 4) v = 255;
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-18)*(y-18))) < 1.5) v = 0;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-18)*(y-18))) < 4) v = 255;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-18)*(y-18))) < 1.5) v = 0;
+            if (x >= 38 && x <= 46 && y >= 50 && y <= 56) v = 255;
+            if (x >= 74 && x <= 82 && y >= 50 && y <= 56) v = 255;
+            if (x >= 28 && x <= 92 && y >= 58 && y <= 60) v = 255;
             raw ~= v;
         }
     }
@@ -30,7 +29,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm72.ximg", header ~ comp);
-    std.file.write("rm72.raw", raw);
-    writefln("made rm72.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm73.ximg", header ~ comp);
+    std.file.write("rm73.raw", raw);
+    writefln("made rm73.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
