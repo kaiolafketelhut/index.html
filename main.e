@@ -9,23 +9,25 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            double b = ((x-60.0)*(x-60.0))/(30.0*30.0) + ((y-40.0)*(y-40.0))/(17.0*17.0);
+            double b = ((x-60.0)*(x-60.0))/(22.0*22.0) + ((y-38.0)*(y-38.0))/(13.0*13.0);
             if (b < 1) v = 255;
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-30)*(y-30))) < 19) v = 255;
-            if (sqrt(cast(double)((x-48)*(x-48) + (y-22)*(y-22))) < 5) v = 255;
-            if (sqrt(cast(double)((x-48)*(x-48) + (y-22)*(y-22))) < 2) v = 0;
-            if (sqrt(cast(double)((x-72)*(x-72) + (y-22)*(y-22))) < 5) v = 255;
-            if (sqrt(cast(double)((x-72)*(x-72) + (y-22)*(y-22))) < 2) v = 0;
-            if (x >= 40 && x <= 56 && y >= 16 && y <= 18) v = 255;
-            if (x >= 64 && x <= 80 && y >= 16 && y <= 18) v = 255;
-            if (sqrt(cast(double)((x-38)*(x-38) + (y-30)*(y-30))) < 4) v = 255;
-            if (sqrt(cast(double)((x-82)*(x-82) + (y-30)*(y-30))) < 4) v = 255;
-            if (x >= 38 && x <= 82 && y >= 34 && y <= 35) v = 0;
-            if (sqrt(cast(double)((x-52)*(x-52) + (y-42)*(y-42))) < 1.5) v = 0;
-            if (sqrt(cast(double)((x-68)*(x-68) + (y-42)*(y-42))) < 1.5) v = 0;
-            if (x >= 34 && x <= 42 && y >= 46 && y <= 56) v = 255;
-            if (x >= 78 && x <= 86 && y >= 46 && y <= 56) v = 255;
-            if (x >= 22 && x <= 98 && y >= 58 && y <= 60) v = 255;
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-28)*(y-28))) < 14) v = 255;
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 5) v = 255;
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 2) v = 0;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 5) v = 255;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 2) v = 0;
+            if (x >= 50 && x <= 70 && y >= 32 && y <= 33) v = 0;
+            if (sqrt(cast(double)((x-36)*(x-36) + (y-46)*(y-46))) < 2) v = 0;
+            if (sqrt(cast(double)((x-36)*(x-36) + (y-46)*(y-46))) < 3) v = 255;
+            if (sqrt(cast(double)((x-84)*(x-84) + (y-46)*(y-46))) < 2) v = 0;
+            if (sqrt(cast(double)((x-84)*(x-84) + (y-46)*(y-46))) < 3) v = 255;
+            if (sqrt(cast(double)((x-42)*(x-42) + (y-52)*(y-52))) < 2) v = 0;
+            if (sqrt(cast(double)((x-42)*(x-42) + (y-52)*(y-52))) < 3) v = 255;
+            if (sqrt(cast(double)((x-78)*(x-78) + (y-52)*(y-52))) < 2) v = 0;
+            if (sqrt(cast(double)((x-78)*(x-78) + (y-52)*(y-52))) < 3) v = 255;
+            if (x >= 38 && x <= 46 && y >= 44 && y <= 54) v = 255;
+            if (x >= 74 && x <= 82 && y >= 44 && y <= 54) v = 255;
+            if (x >= 28 && x <= 92 && y >= 58 && y <= 60) v = 255;
             raw ~= v;
         }
     }
@@ -33,7 +35,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm81.ximg", header ~ comp);
-    std.file.write("rm81.raw", raw);
-    writefln("made rm81.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm82.ximg", header ~ comp);
+    std.file.write("rm82.raw", raw);
+    writefln("made rm82.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
