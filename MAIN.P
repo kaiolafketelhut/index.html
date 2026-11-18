@@ -9,30 +9,19 @@ void main() {
     foreach (y; 0..h) {
         foreach (x; 0..w) {
             ubyte v = 0;
-            // body: wide round pacman frog
-            double b = ((x-60.0)*(x-60.0))/(28.0*28.0) + ((y-40.0)*(y-40.0))/(16.0*16.0);
+            double b = ((x-60.0)*(x-60.0))/(26.0*26.0) + ((y-38.0)*(y-38.0))/(15.0*15.0);
             if (b < 1) v = 255;
-            // head: wide
-            if (sqrt(cast(double)((x-60)*(x-60) + (y-30)*(y-30))) < 18) v = 255;
-            // horns: 2 triangles on top - pointy eyelids
-            if (x >= 46 && x <= 50 && y >= 10 && y <= 18) v = 255;
-            if (x >= 48 && x <= 50 && y >= 12 && y <= 18) v = 255;
-            if (x >= 70 && x <= 74 && y >= 10 && y <= 18) v = 255;
-            if (x >= 70 && x <= 72 && y >= 12 && y <= 18) v = 255;
-            // eyes: 2 circles under horns
-            if (sqrt(cast(double)((x-48)*(x-48) + (y-20)*(y-20))) < 4) v = 255;
-            if (sqrt(cast(double)((x-48)*(x-48) + (y-20)*(y-20))) < 1.5) v = 0;
-            if (sqrt(cast(double)((x-72)*(x-72) + (y-20)*(y-20))) < 4) v = 255;
-            if (sqrt(cast(double)((x-72)*(x-72) + (y-20)*(y-20))) < 1.5) v = 0;
-            // HUGE mouth: very wide bar - pacman eats everything
-            if (x >= 40 && x <= 80 && y >= 32 && y <= 34) v = 0;
-            // belly: bar
-            if (x >= 44 && x <= 76 && y >= 48 && y <= 50) v = 0;
-            // front legs: 2 bars
-            if (x >= 44 && x <= 48 && y >= 50 && y <= 56) v = 255;
-            if (x >= 72 && x <= 76 && y >= 50 && y <= 56) v = 255;
-            // ground: bar
-            if (x >= 30 && x <= 90 && y >= 56 && y <= 58) v = 255;
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-28)*(y-28))) < 16) v = 255;
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 5) v = 255;
+            if (sqrt(cast(double)((x-50)*(x-50) + (y-22)*(y-22))) < 2) v = 0;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 5) v = 255;
+            if (sqrt(cast(double)((x-70)*(x-70) + (y-22)*(y-22))) < 2) v = 0;
+            if (x >= 48 && x <= 72 && y >= 32 && y <= 33) v = 0;
+            if (x >= 48 && x <= 72 && y >= 38 && y <= 48) v = 0;
+            if (sqrt(cast(double)((x-60)*(x-60) + (y-43)*(y-43))) < 2) v = 255;
+            if (x >= 34 && x <= 40 && y >= 44 && y <= 54) v = 255;
+            if (x >= 80 && x <= 86 && y >= 44 && y <= 54) v = 255;
+            if (x >= 28 && x <= 92 && y >= 54 && y <= 56) v = 255;
             raw ~= v;
         }
     }
@@ -40,7 +29,7 @@ void main() {
     header ~= nativeToLittleEndian(cast(int)w);
     header ~= nativeToLittleEndian(cast(int)h);
     auto comp = compress(raw);
-    std.file.write("rm68.ximg", header ~ comp);
-    std.file.write("rm68.raw", raw);
-    writefln("made rm68.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
+    std.file.write("rm69.ximg", header ~ comp);
+    std.file.write("rm69.raw", raw);
+    writefln("made rm69.ximg %s bytes, raw %s bytes", header.length + comp.length, raw.length);
 }
